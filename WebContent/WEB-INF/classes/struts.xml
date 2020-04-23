@@ -25,5 +25,9 @@
 			<result type="redirect" name="success">/LoginCheck.jsp</result> 
 		</action>	
    </package>
-	
+	<package name="saiban" namespace="/" extends="json-default">
+		<action name="saiban" class="jp.co.display.action.SaiBanAction" method="saiBanAction">
+			<result name="success" type="json"></result>
+		</action>
+	</package>		
 </struts>
