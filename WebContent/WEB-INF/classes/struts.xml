@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+ "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+ "http://struts.apache.org/dtds/struts-2.5.dtd">
+  
+<struts>    
+ <constant name="struts.devMode" value="false" />   
+	<package name="login" extends="struts-default"> 
+		<action name="login" class="jp.co.display.action.LoginAction" method="loginAction">  
+			<result type="redirect" name="success">/SubMenuCheck.jsp</result> 
+			<result type="redirect" name="error" >/LoginCheck.jsp</result> 
+		</action>	
+   </package>	
+   	<package name="GetEmployee" extends="struts-default"> 
+		<action name="GetEmployee" class="jp.co.display.action.GetEmployeeAction" method="getEmployeeAction">
+		</action>	
+	</package>	
+	<package name="PwReset" extends="struts-default"> 
+		<action name="PwReset" class="jp.co.display.action.PasswordResetAction" method="PwResetAction">  
+			<result type="redirect" name="success">/LoginCheck.jsp</result> 
+		</action>	
+   </package>		
+   	<package name="SignOut" extends="struts-default"> 
+		<action name="SignOut" class="jp.co.display.action.SignOutAction" method="signOut">  
+			<result type="redirect" name="success">/LoginCheck.jsp</result> 
+		</action>	
+   </package>
+	
+</struts>
