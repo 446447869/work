@@ -28,3 +28,9 @@
 *.setbluetext{
 	border-color:#3498DB;
 }
+*.err{
+	color:red;
+}
+*.errtext{
+	border-color:red;
+}

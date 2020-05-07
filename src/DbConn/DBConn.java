@@ -12,7 +12,7 @@ public class DBConn{
 	*  @return Connection　conn
 	*/
     public Connection getConn(){
-        String url = "jdbc:mysql://localhost:3306/lycdb?serverTimezone=JST&characterEncoding=UTF-8";
+        String url = "jdbc:mysql://localhost:3306/lycdb?serverTimezone=JST&useSSL=false&characterEncoding=UTF-8";
         String user = "root";
         String pwd = "root";
         try {  									

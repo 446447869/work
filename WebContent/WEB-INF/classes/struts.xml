@@ -25,9 +25,27 @@
 			<result type="redirect" name="success">/LoginCheck.jsp</result> 
 		</action>	
    </package>
-	<package name="saiban" namespace="/" extends="json-default">
+<package name="saiban" namespace="/" extends="json-default">
 		<action name="saiban" class="jp.co.display.action.SaiBanAction" method="saiBanAction">
 			<result name="success" type="json"></result>
 		</action>
-	</package>		
+		<action name="maxMinEmpNo" class="jp.co.display.action.SaiBanAction" method="maxMinEmpNoAction">
+			<result name="success" type="json"></result>
+		</action>		
+		<action name="correct" class="jp.co.display.action.CorrectAction" method="correctAction">
+			<result name="success" type="json"></result>
+		</action>
+		<action name="bankcheck" class="jp.co.display.action.BankCheckAction" method="bankCheckAction">
+			<result name="success" type="json"></result>
+		</action>
+		<action name="postalCodecheck" class="jp.co.display.action.PostalCodecheckAction" method="postalCodecheckAction">
+			<result name="success" type="json"></result>
+		</action>
+		<action name="empDataSeting" class="jp.co.display.action.EmpSetingAction" method="empDataSetingAction">
+			<result name="success" type="json"></result>
+		</action>
+		<action name="empAllDataSeting" class="jp.co.display.action.EmpSetingAction" method="empDataAllSetingAction">
+			<result name="success" type="json"></result>
+		</action>
+	</package>	
 </struts>

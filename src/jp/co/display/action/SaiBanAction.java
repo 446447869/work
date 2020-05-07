@@ -28,7 +28,12 @@ public class SaiBanAction extends LogicBasic{
 	*/
 	public String saiBanAction() throws Exception{
 		EmployeeInfoManageService employeeInfoManageService=new EmployeeInfoManageService();
-		employeeInfoManageService.saiBan();
+		employeePojo=employeeInfoManageService.saiBan();	
+		return "success";
+	}
+	public String maxMinEmpNoAction() throws Exception{
+		EmployeeInfoManageService employeeInfoManageService=new EmployeeInfoManageService();
+		employeePojo=employeeInfoManageService.maxMinEmpNo();	
 		return "success";
 	}
 }
