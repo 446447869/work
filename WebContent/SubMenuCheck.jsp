@@ -37,7 +37,7 @@ function myFunction(){
 	<div style="margin-left:60px;"><%=session.getAttribute("authMaster") %>:<%=session.getAttribute("EmployeeName") %></div>
 	<div align="center" style="margin-top:60px;">
 		<button  style="margin-right:50px;" class="setbigsize setdiv" onclick="">実績入力</button>
-		<button  style="margin-left:50px;" class="setbigsize setdiv" onclick="" id="EmployeeInfomanage">社員情報管理</button>
+		<button  style="margin-left:50px;" class="setbigsize setdiv" onclick="location.href='EmployeeInfomanage.jsp'" id="EmployeeInfomanage">社員情報管理</button>
 	</div>
 	<div align="center" style="margin-top:10px;">
 	<button class="setsmallsize">休憩時間設定</button>

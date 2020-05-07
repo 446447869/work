@@ -7,13 +7,29 @@ function ClickBtn(num){
 	$("input:button[id^='btn']").addClass("setbluebtn");
 	$("#btn"+num).removeClass("setbluebtn");
 	$("#btn"+num).addClass("setgreenbtn");
+	$("input:text").removeClass("errtext");
+	$("input:text").addClass("setbluetext");
+	$("input:password").removeClass("errtext");
+	$("input:password").addClass("setbluetext");
 	$("#genderNo option[value='-1']").remove();
 	$("#AuthorityNo option[value='-1']").remove();
 	$("#DependentsPerson option[value='-1']").remove();
-	$("input:text").removeClass("errtext");
-	$("input:text").addClass("setbluetext");
 	$("select").removeClass("errtext");
 	$("select").addClass("setbluetext");
+	$("select").attr('disabled',false);
+	$("input:password").attr('disabled',false);
+	$("input:text").attr('disabled',false);
+	$("#FirstHalfOfAddress").attr('disabled',true);
+	$("#SecondHalfOfAddress").attr('disabled',true);
+	$("#BankBranchCode").attr('disabled',true);
+	$("#BankBranchName").attr('disabled',true);
+	$("#AccountNo").attr('disabled',true);
+	$("#AccountName").attr('disabled',true);
+	$("#Age").attr('disabled',true);
+	$("#Calendar").attr('disabled',false);
+	$("#PostSearch").attr('disabled',false);
+	$("#FirstHalfOfAddress").attr('disabled',true);
+	$("#SecondHalfOfAddress").attr('disabled',true);
 	//エラーメセッジクリア
 	$("span[id$='err']").html("");
 	//検索結果をクリア
@@ -30,8 +46,6 @@ function ClickBtn(num){
 		$("#empid1_1").attr('disabled',true);
 		$("#empid1_2").attr('disabled',true);
 		$("#empid2").attr('disabled',true);
-		$("#FirstHalfOfAddress").attr('disabled',true);
-		$("#SecondHalfOfAddress").attr('disabled',true);
 		$.ajax({
 			type:"post",
 			url:"saiban.action",
@@ -54,10 +68,10 @@ function ClickBtn(num){
 		$("#DependentsPerson option[value='-1']").remove();
 		if($("#empid1").val()=="" && $("#empname1").val()==""){
 			$("#empid1err").html(MSG005)
-			$("empid1").removeClass("errtext");
-			$("empid1").addClass("setbluetext");
-			$("empname1").removeClass("errtext");
-			$("empname1").addClass("setbluetext");
+			$("empid1").removeClass("setbluetext");
+			$("empid1").addClass("errtext");
+			$("empname1").removeClass("setbluetext");
+			$("empname1").addClass("errtext");
 		}
 		else{
 			$.ajax({
@@ -69,22 +83,24 @@ function ClickBtn(num){
 				success:function(json){
 					if (json.employeePojo.peopleNum<1){
 						$("#empid1err").html(MSG005)
-						$("empid1").removeClass("errtext");
-						$("empid1").addClass("setbluetext");
-						$("empname1").removeClass("errtext");
-						$("empname1").addClass("setbluetext");
+						$("empid1").removeClass("setbluetext");
+						$("empid1").addClass("errtext");
+						$("empname1").removeClass("setbluetext");
+						$("empname1").addClass("errtext");
 					}
 					else if(json.employeePojo.peopleNum>1){
 						$("#empid1err").html(MSG018)
-						$("empid1").removeClass("errtext");
-						$("empid1").addClass("setbluetext");
-						$("empname1").removeClass("errtext");
-						$("empname1").addClass("setbluetext");
+						$("empid1").removeClass("setbluetext");
+						$("empid1").addClass("errtext");
+						$("empname1").removeClass("setbluetext");
+						$("empname1").addClass("errtext");
 					}
 					else{
 						$("input:text").attr('disabled',false);
 						$("#empid2").attr('disabled',true);
 						$("#Enter").attr('disabled',false);
+						$("#FirstHalfOfAddress").attr('disabled',true);
+						$("#SecondHalfOfAddress").attr('disabled',true);
 						$("#empid2").val(json.employeePojo.employeeNo);
 						$("#empname2").val(json.employeePojo.employeeName);
 						$("#password").val("******");
@@ -112,6 +128,8 @@ function ClickBtn(num){
 						$("#AccountName").val(json.employeePojo.accountName);
 						//前回アップロード時間
 						sessionStorage.setItem('updateTime', json.employeePojo.updateTime);
+						SalaryOut();
+    					bank();
 					}
 				}
 			});
@@ -128,10 +146,10 @@ function ClickBtn(num){
 		$("#DependentsPerson option[value='-1']").remove();
 		if($("#empid1").val()=="" && $("#empname1").val()==""){
 			$("#empid1err").html(MSG005)
-			$("empid1").removeClass("errtext");
-			$("empid1").addClass("setbluetext");
-			$("empname1").removeClass("errtext");
-			$("empname1").addClass("setbluetext");
+			$("empid1").removeClass("setbluetext");
+			$("empid1").addClass("errtext");
+			$("empname1").removeClass("setbluetext");
+			$("empname1").addClass("errtext");
 		}
 		else{
 			$.ajax({
@@ -143,24 +161,28 @@ function ClickBtn(num){
 				success:function(json){
 					if (json.employeePojo.peopleNum<1){
 						$("#empid1err").html(MSG005)
-						$("empid1").removeClass("errtext");
-						$("empid1").addClass("setbluetext");
-						$("empname1").removeClass("errtext");
-						$("empname1").addClass("setbluetext");
+						$("empid1").removeClass("setbluetext");
+						$("empid1").addClass("errtext");
+						$("empname1").removeClass("setbluetext");
+						$("empname1").addClass("errtext");
+						return
 					}
 					else if(json.employeePojo.peopleNum>1){
 						$("#empid1err").html(MSG018)
-						$("empid1").removeClass("errtext");
-						$("empid1").addClass("setbluetext");
-						$("empname1").removeClass("errtext");
-						$("empname1").addClass("setbluetext");
+						$("empid1").removeClass("setbluetext");
+						$("empid1").addClass("errtext");
+						$("empname1").removeClass("setbluetext");
+						$("empname1").addClass("errtext");
+						return
 					}
 					else{
 						$("#Enter").attr('disabled',false);
 						$("input:text").attr('disabled',true);
+						$("select").attr('disabled',true);
+						$("input:password").attr('disabled',true);
+						$("#Calendar").attr('disabled',true);
+						$("#PostSearch").attr('disabled',true);
 						$("#empid1").attr('disabled',false);
-						$("#empid1_1").attr('disabled',false);
-						$("#empid1_2").attr('disabled',false);
 						$("#empname1").attr('disabled',false);
 						$("#empid2").val(json.employeePojo.employeeNo);
 						$("#empname2").val(json.employeePojo.employeeName);
@@ -189,6 +211,7 @@ function ClickBtn(num){
 						$("#AccountName").val(json.employeePojo.accountName);
 						//前回アップロード時間
 						sessionStorage.setItem('updateTime', json.employeePojo.updateTime);
+						SalaryOut();
 					}
 				}
 			});
@@ -203,55 +226,71 @@ function ClickBtn(num){
 		var minNo=$("#empid1_1").val();
 		var maxNo=$("#empid1_2").val();
 		if(minNo==""){
-			minNo="999";
+			minNo="000";
 		}
 		else if (isNaN(minNo)){
-			$("#empid1err").html(MSG022);
-			$("empid1_1").removeClass("errtext");
-			$("empid1_1").addClass("setbluetext");
-			$("empid1_2").removeClass("errtext");
-			$("empid1_2").addClass("setbluetext");
+			$("#empidhanierr").html(MSG022);
+			$("empid1_1").removeClass("setbluetext");
+			$("empid1_1").addClass("errtext");
+			$("empid1_2").removeClass("setbluetext");
+			$("empid1_2").addClass("errtext");
+			return;
 		}
 		if(maxNo==""){
-			maxNo="000";
+			maxNo="999";
 		}
 		else if (isNaN(maxNo)){
-			$("#empid1err").html(MSG022);
-			$("empid1_1").removeClass("errtext");
-			$("empid1_1").addClass("setbluetext");
-			$("empid1_2").removeClass("errtext");
-			$("empid1_2").addClass("setbluetext");
+			$("#empidhanierr").html(MSG022);
+			$("empid1_1").removeClass("setbluetext");
+			$("empid1_1").addClass("errtext");
+			$("empid1_2").removeClass("setbluetext");
+			$("empid1_2").addClass("errtext");
+			return;
 		}
+		maxNo=(Array(3).join(0) + maxNo).slice(-3);
+		minNo=(Array(3).join(0) + minNo).slice(-3);
+		if(maxNo<minNo){
+			$("#empidhanierr").html(MSG022);
+			$("empid1_1").removeClass("setbluetext");
+			$("empid1_1").addClass("errtext");
+			$("empid1_2").removeClass("setbluetext");
+			$("empid1_2").addClass("errtext");
+			return;
+		}
+		else 
+
 		$.ajax({
 			type:"post",
 			url:"maxMinEmpNo.action",
 			dataType:"json",
 			async:false,
 			success:function(json){
-				if(minNo==""){
-					minNo="000";
+				if($("#empid1_1").val()!=""){
+					if(minNo<json.employeePojo.minemployeeNo){
+						$("#empidhanierr").html(MSG022);
+						$("empid1_1").removeClass("setbluetext");
+						$("empid1_1").addClass("errtext");
+						$("empid1_2").removeClass("setbluetext");
+						$("empid1_2").addClass("errtext");
+						return;
+					}
 				}
-				else if(minNo<json.employeePojo.minemployeeNo){
-					$("#empid1err").html(MSG022);
-					$("empid1_1").removeClass("errtext");
-					$("empid1_1").addClass("setbluetext");
-					$("empid1_2").removeClass("errtext");
-					$("empid1_2").addClass("setbluetext");
-					return;
-				}
-				if(maxNo==""){
-					maxNo="999";
-				}
-				else if(maxNo>json.employeePojo.maxemployeeNo){
-					$("#empid1err").html(MSG022);
-					$("empid1_1").removeClass("errtext");
-					$("empid1_1").addClass("setbluetext");
-					$("empid1_2").removeClass("errtext");
-					$("empid1_2").addClass("setbluetext");
-					return;
+				if($("#empid1_2").val()!=""){
+					if(maxNo>json.employeePojo.maxemployeeNo){
+						$("#empidhanierr").html(MSG022);
+						$("empid1_1").removeClass("setbluetext");
+						$("empid1_1").addClass("errtext");
+						$("empid1_2").removeClass("setbluetext");
+						$("empid1_2").addClass("errtext");
+						return;
+					}
 				}
 					$("#Enter").attr('disabled',false);
 					$("input:text").attr('disabled',false);
+					$("#BankBranchCode").attr('disabled',true);
+					$("#BankBranchName").attr('disabled',true);
+					$("#AccountNo").attr('disabled',true);
+					$("#AccountName").attr('disabled',true);
 					$("#empid2").attr('disabled',true);
 					$(".mark").text("");
 					$("#AuthorityNo").val(-1);
@@ -274,6 +313,10 @@ function enter(){
 	$("input:text").addClass("setbluetext");
 	$("select").removeClass("errtext");
 	$("select").addClass("setbluetext");
+	$("input:password").removeClass("errtext");
+	$("input:password").addClass("setbluetext");
+	$("#Calendar").attr('disabled',false);
+	$("#PostSearch").attr('disabled',false);
 	var numandalphabet=/^[0-9a-zA-Z]*$/g;
 	var katakana=/^[ァ-ヶー　]*$/;
 	var stop=false;
@@ -325,7 +368,7 @@ function enter(){
 			$("#PersonalMail").addClass("errtext");
 			stop=true;
 		}
-		var mailcheck = /^([\.a-zA-Z0-9_-])+/;
+		var mailcheck = /^[0-9a-zA-Z_]{1,}$/;
 		if(!mailcheck.test($("#CompanyMail").val())&&$("#CompanyMail").val()!=""){
 			$("#CompanyMailerr").html(MSG008);
 			$("#CompanyMail").removeClass("setbluetext");
@@ -345,7 +388,6 @@ function enter(){
 		    }
 		    else if(isNaN($("#PhoneNo1").val())||isNaN($("#PhoneNo2").val())||isNaN($("#PhoneNo3").val())){
 		    	$("#PhoneNoerr").html(MSG011);
-		    	$("#PhoneNoerr").html(MSG011);
 				$("#PhoneNo1").removeClass("setbluetext");
 				$("#PhoneNo1").addClass("errtext");
 				$("#PhoneNo2").removeClass("setbluetext");
@@ -357,7 +399,6 @@ function enter(){
 			}
 		    if(($("#JoiningCompanyOfYear").val()=="0")!=($("#IntoCompanyOfMonth").val()=="0")){
 				$("#IntoCompanyerr").html(MSG010);
-		    	$("#PhoneNoerr").html(MSG011);
 				$("#JoiningCompanyOfYear").removeClass("setbluetext");
 				$("#JoiningCompanyOfYear").addClass("errtext");
 				$("#IntoCompanyOfMonth").removeClass("setbluetext");
@@ -383,7 +424,7 @@ function enter(){
 				stop=true;
 			}
 		    else if(!katakana.test($("#AccountName").val())&&$("#AccountName").val()!=""){
-		    	$("#empid2err").html(MSG017);
+		    	$("#empid2err").html(MSG012);
 				$("#AccountName").removeClass("setbluetext");
 				$("#AccountName").addClass("errtext");	
 				stop=true;
@@ -486,7 +527,6 @@ function enter(){
 		    }
 		    else if(isNaN($("#PhoneNo1").val())||isNaN($("#PhoneNo2").val())||isNaN($("#PhoneNo3").val())){
 		    	$("#PhoneNoerr").html(MSG011);
-		    	$("#PhoneNoerr").html(MSG011);
 				$("#PhoneNo1").removeClass("setbluetext");
 				$("#PhoneNo1").addClass("errtext");
 				$("#PhoneNo2").removeClass("setbluetext");
@@ -498,7 +538,6 @@ function enter(){
 		}
 	    if(($("#JoiningCompanyOfYear").val()=="0")!=($("#IntoCompanyOfMonth").val()=="0")){
 			$("#IntoCompanyerr").html(MSG010);
-	    	$("#PhoneNoerr").html(MSG011);
 			$("#JoiningCompanyOfYear").removeClass("setbluetext");
 			$("#JoiningCompanyOfYear").addClass("errtext");
 			$("#IntoCompanyOfMonth").removeClass("setbluetext");
@@ -722,16 +761,32 @@ function enter(){
 		//一括修正
 		var minNo=$("#empid1_1").val();
 		var maxNo=$("#empid1_2").val();
-		if (minNo!=""&&isNaN(minNo)){
-			$("#empid1err").html(MSG022);
+		if(minNo==""){
+			minNo="000";
+		}
+		else if (isNaN(minNo)){
+			$("#empidhanierr").html(MSG022);
 			$("empid1_1").removeClass("errtext");
 			$("empid1_1").addClass("setbluetext");
 			$("empid1_2").removeClass("errtext");
 			$("empid1_2").addClass("setbluetext");
 			return;
 		}
-		if (maxNo!=""&&isNaN(maxNo)){
-			$("#empid1err").html(MSG022);
+		if(maxNo==""){
+			maxNo="999";
+		}
+		else if (isNaN(maxNo)){
+			$("#empidhanierr").html(MSG022);
+			$("empid1_1").removeClass("errtext");
+			$("empid1_1").addClass("setbluetext");
+			$("empid1_2").removeClass("errtext");
+			$("empid1_2").addClass("setbluetext");
+			return;
+		}
+		maxNo=(Array(3).join(0) + maxNo).slice(-3);
+		minNo=(Array(3).join(0) + minNo).slice(-3);
+		if(maxNo<minNo){
+			$("#empidhanierr").html(MSG022);
 			$("empid1_1").removeClass("errtext");
 			$("empid1_1").addClass("setbluetext");
 			$("empid1_2").removeClass("errtext");
@@ -744,27 +799,25 @@ function enter(){
 			dataType:"json",
 			async:false,
 			success:function(json){
-				if(minNo==""){
-					minNo="000";
+				if($("#empid1_1").val()!=""){
+					if(minNo<json.employeePojo.minemployeeNo){
+						$("#empidhanierr").html(MSG022);
+						$("empid1_1").removeClass("errtext");
+						$("empid1_1").addClass("setbluetext");
+						$("empid1_2").removeClass("errtext");
+						$("empid1_2").addClass("setbluetext");
+						return;
+					}
 				}
-				else if(minNo<json.employeePojo.minemployeeNo){
-					$("#empid1err").html(MSG022);
-					$("empid1_1").removeClass("errtext");
-					$("empid1_1").addClass("setbluetext");
-					$("empid1_2").removeClass("errtext");
-					$("empid1_2").addClass("setbluetext");
-					return;
-				}
-				if(maxNo==""){
-					maxNo="999";
-				}
-				else if(maxNo>json.employeePojo.maxemployeeNo){
-					$("#empid1err").html(MSG022);
-					$("empid1_1").removeClass("errtext");
-					$("empid1_1").addClass("setbluetext");
-					$("empid1_2").removeClass("errtext");
-					$("empid1_2").addClass("setbluetext");
-					return;
+				if($("#empid1_2").val()!=""){
+					if(maxNo>json.employeePojo.maxemployeeNo){
+						$("#empidhanierr").html(MSG022);
+						$("empid1_1").removeClass("errtext");
+						$("empid1_1").addClass("setbluetext");
+						$("empid1_2").removeClass("errtext");
+						$("empid1_2").addClass("setbluetext");
+						return;
+					}
 				}
 					$.ajax({
 		    			type:"post",
@@ -831,6 +884,8 @@ function load() {
 	$("input:button[id^='btn']").addClass("setbluebtn");
 	$("input:text").removeClass("errtext");
 	$("input:text").addClass("setbluetext");
+	$("input:password").removeClass("errtext");
+	$("input:password").addClass("setbluetext");
 	$("select").removeClass("errtext");
 	$("select").addClass("setbluetext");
 	//エラーメセッジクリア
@@ -839,8 +894,21 @@ function load() {
 	$("input").not(":button").val("");
 	$("select").val("0");
 	$(".mark").text("★");
+
+		var Now=new Date();
+		var Year = Now.getFullYear();
+		var Month = Now.getMonth()+1;
+		Month=(Array(2).join(0) + Month).slice(-2);
+		var Day = Now.getDay();
+		Day=(Array(2).join(0) + Day).slice(-2);
+		$('#Calendar').attr('max',Year-20+'-'+Month+'-'+Day);
+		$('#Calendar').attr('min',Year-50+'-'+Month+'-'+Day);
 }
 function bank(){
+	$("#BankBranchCode").val("");
+	$("#BankBranchName").val("");
+	$("#AccountNo").val("");
+	$("#AccountName").val("");
 	if ($("#BankNo").val()==0){
 		$("#BankBranchCode").attr('disabled',true);
 		$("#BankBranchName").attr('disabled',true);
@@ -851,10 +919,15 @@ function bank(){
 		$("#BankBranchCode").attr('disabled',false);
 		$("#BankBranchName").attr('disabled',false);
 		$("#AccountNo").attr('disabled',false);
-		$("#AccountName").attr('disabled',false);	
+		$("#AccountName").attr('disabled',false);
 	}
 }
 function BankBranch(num){
+	$("#empid2err").html("");
+	$("BankBranchCode").removeClass("errtext");
+	$("BankBranchCode").addClass("setbluetext");
+	$("BankBranchName").removeClass("errtext");
+	$("BankBranchName").addClass("setbluetext");
 	if(num==0){
 		//支店名から
 		$.ajax({
@@ -864,10 +937,14 @@ function BankBranch(num){
 			async:false,
 			data: {"employeeBean.bankNo":$("#BankNo").val(),"employeeBean.bankBranchName":$("#BankBranchName").val()}, 
 			success:function(json){
-				if (json.employeePojo.BankBranchName!=null){
-					$("#BankBranchNo").val();
-					$("#BankBranchName").val();
-					$("#empid1err").html(MSG019);
+				if (json.employeePojo.bankBranchCode==null){
+					$("#BankBranchCode").val("");
+					$("#BankBranchName").val("");
+					$("BankBranchCode").removeClass("setbluetext");
+					$("BankBranchCode").addClass("errtext");
+					$("BankBranchName").removeClass("setbluetext");
+					$("BankBranchName").addClass("errtext");
+					$("#empid2err").html(MSG019);
 				}
 				else{
 					$("#BankBranchCode").val(json.employeePojo.bankBranchCode);
@@ -884,9 +961,13 @@ function BankBranch(num){
 			async:false,
 			data: {"employeeBean.bankNo":$("#BankNo").val(),"employeeBean.bankBranchCode":$("#BankBranchCode").val()}, 
 			success:function(json){
-				if (json.employeePojo.BankBranchName!=null){
-					$("#BankBranchNo").val();
-					$("#BankBranchName").val();
+				if (json.employeePojo.bankBranchName==null){
+					$("#BankBranchCode").val("");
+					$("#BankBranchName").val("");
+					$("BankBranchCode").removeClass("setbluetext");
+					$("BankBranchCode").addClass("errtext");
+					$("BankBranchName").removeClass("setbluetext");
+					$("BankBranchName").addClass("errtext");
 					$("#empid2err").html(MSG019);
 				}
 				else{
@@ -919,8 +1000,23 @@ function setage(){
 	$("#Age").val(Age);
 }
 function PostalCode(){
+	$("#empid3err").html("");
+	$("PostalCode1").removeClass("errtext");
+	$("PostalCode1").addClass("setbluetext");
+	$("FirstHalfOfAddress").removeClass("errtext");
+	$("FirstHalfOfAddress").addClass("setbluetext");
+	$("SecondHalfOfAddress").removeClass("errtext");
+	$("SecondHalfOfAddress").addClass("setbluetext");
+	$("PostalCode2").removeClass("errtext");
+	$("PostalCode2").addClass("setbluetext");
+	$("#FirstHalfOfAddress").attr('disabled',true);
+	$("#SecondHalfOfAddress").attr('disabled',true);
 	if($("#PostalCode1").val().length<3||$("#PostalCode2").val().length<4) {
 		$("#empid3err").html(MSG020);
+		$("PostalCode1").removeClass("setbluetext");
+		$("PostalCode1").addClass("errtext");
+		$("PostalCode2").removeClass("setbluetext");
+		$("PostalCode2").addClass("errtext");
 		return
 	}
 	//先にデータベースで検索
@@ -934,22 +1030,39 @@ function PostalCode(){
 			if (json.employeePojo.firstHalfOfAddress!=null){
 				$("#FirstHalfOfAddress").val(json.employeePojo.firstHalfOfAddress);
 				$("#SecondHalfOfAddress").val(json.employeePojo.secondHalfOfAddress);
+				$("#SecondHalfOfAddress").attr('disabled',false);
 				return
 			}
 		}
 	});
 	//条件で見つからない場合はAPI
 	 AjaxZip3.zip2addr('PostalCode1','PostalCode2','FirstHalfOfAddress','FirstHalfOfAddress');
+	 $("#SecondHalfOfAddress").attr('disabled',false);
 	 AjaxZip3.onFailure = function() {
+		 if(sessionStorage.getItem('button')==1){
 		 	$("#FirstHalfOfAddress").val("");
 		 	$("#SecondHalfOfAddress").val("");
 			$("#FirstHalfOfAddress").attr('disabled',false);
-			$("#SecondHalfOfAddress").attr('disabled',false);
+		 }
+		 else{
+		 	$("#FirstHalfOfAddress").val("");
+		 	$("#SecondHalfOfAddress").val("");
+			$("#empid3err").html(MSG020);
+			$("PostalCode1").removeClass("setbluetext");
+			$("PostalCode1").addClass("errtext");
+			$("PostalCode2").removeClass("setbluetext");
+			$("PostalCode2").addClass("errtext");
+			$("#SecondHalfOfAddress").attr('disabled',true);
+		 }
     };
 }
 function PostalCodechange(){
-	$("#FirstHalfOfAddress").val("");
-	$("#SecondHalfOfAddress").val("");
+	if($("#PostalCode1").val()==""||$("#PostalCode2").val()==""){
+		$("#FirstHalfOfAddress").val("");
+		$("#SecondHalfOfAddress").val("");
+		$("#FirstHalfOfAddress").attr('disabled',true);
+		$("#SecondHalfOfAddress").attr('disabled',true);
+	}
 }
 function SalaryIn(){
 	var Salary=$("#Salary").val()
@@ -959,9 +1072,13 @@ function SalaryIn(){
 	$("#Salary").val(Salary);
 }
 function SalaryOut(){
-	var Salary=$("#Salary").val()
+	var Salary=$("#Salary").val();
+	Salary=Salary.replace(/\b(0+)/gi,"");
 	if(Salary.length>3){
 		Salary=Salary.substring(0,Salary.length-3)+','+Salary.substring(Salary.length-3);
+	}
+	if($("#Salary").val()!=""&&Salary==""){
+		Salary=0;
 	}
 	$("#Salary").val(Salary);
 }

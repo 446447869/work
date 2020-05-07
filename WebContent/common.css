@@ -34,3 +34,27 @@
 *.errtext{
 	border-color:red;
 }
+#Calendar{
+    width: 30px;
+    height:30px;
+    background: url("date.gif") no-repeat center;
+    background-size: cover;
+    border: none;
+}
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+   display: none;
+}
+input[type="date"]::-webkit-clear-button{
+   display:none;
+}
+input[type="date"]::-webkit-inner-spin-button{
+   display:none;
+}
+input[type="date"]::-webkit-calendar-picker-indicator{
+    width: 30px;
+    height:30px;
+}
+input:focus::-webkit-input-placeholder{
+            text-indent: -999em;
+            z-index: -20;
+        }

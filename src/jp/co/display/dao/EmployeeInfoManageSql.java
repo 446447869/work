@@ -46,7 +46,7 @@ public class EmployeeInfoManageSql {
     	String sql;
     	PreparedStatement pre;
     	int peopleNum=0;
-    	if (employeeBean.getEmployeeNo() != null) {
+    	if (employeeBean.getEmployeeNo() != "") {
     		sql = "select t1.employeeNo,t1.employeeName,t1.updateTime,"
 				+ "t2.age,t2.JoiningCompanyOfYear,t2.intoCompanyOfMonth,t2.companyMail,t2.personalMail,t2.phoneNo,t2.dependentsPerson,t2.salary,"
 				+ "t3.postalCode,t3.firstHalfOfAddress,t3.secondHalfOfAddress,t3.nearestStation,"
@@ -94,17 +94,24 @@ public class EmployeeInfoManageSql {
         	employeePojo.setAge(rs.getInt("age"));
         	employeePojo.setJoiningCompanyOfYear(rs.getString("JoiningCompanyOfYear"));
         	employeePojo.setIntoCompanyOfMonth(rs.getString("intoCompanyOfMonth"));
-        	employeePojo.setCompanyMail(rs.getString("companyMail").substring(0,rs.getString("companyMail").length()-10));
+        	if(rs.getString("companyMail")!=null) {
+        		employeePojo.setCompanyMail(rs.getString("companyMail").substring(0,rs.getString("companyMail").length()-10));
+        	}
+        	
         	employeePojo.setPersonalMail(rs.getString("personalMail"));
-        	employeePojo.setPhoneNo1(rs.getString("phoneNo").substring(0,3));
-        	employeePojo.setPhoneNo2(rs.getString("phoneNo").substring(3,7));
-        	employeePojo.setPhoneNo3(rs.getString("phoneNo").substring(7,11));	
+        	if(rs.getString("phoneNo")!=null){
+            	employeePojo.setPhoneNo1(rs.getString("phoneNo").substring(0,3));
+            	employeePojo.setPhoneNo2(rs.getString("phoneNo").substring(3,7));
+            	employeePojo.setPhoneNo3(rs.getString("phoneNo").substring(7,11));	
+        	}
         	employeePojo.setAuthorityNo(rs.getInt("authorityNo"));
         	employeePojo.setGenderNo(rs.getInt("genderNo"));
         	employeePojo.setDependentsPerson(rs.getInt("dependentsPerson"));
         	employeePojo.setSalary(rs.getString("salary"));
-        	employeePojo.setPostalCode1(rs.getString("postalCode").substring(0,3));
-        	employeePojo.setPostalCode2(rs.getString("postalCode").substring(3,7));
+        	if(rs.getString("postalCode").length()==7){
+            	employeePojo.setPostalCode1(rs.getString("postalCode").substring(0,3));
+            	employeePojo.setPostalCode2(rs.getString("postalCode").substring(3,7));
+        	}
         	employeePojo.setFirstHalfOfAddress(rs.getString("firstHalfOfAddress"));
         	employeePojo.setSecondHalfOfAddress(rs.getString("secondHalfOfAddress"));
         	employeePojo.setNearestStation(rs.getString("nearestStation"));
@@ -113,14 +120,14 @@ public class EmployeeInfoManageSql {
         	employeePojo.setBankBranchName(rs.getString("bankBranchName"));
         	employeePojo.setAccountNo(rs.getString("accountNo"));
         	employeePojo.setAccountName(rs.getString("accountName"));
-        	peopleNum=+1;
+        	peopleNum+=1;
         }
         employeePojo.setPeopleNum(peopleNum);
         db.closeConn();
     return employeePojo;
 }
 	public EmployeePojo bankcheck(EmployeeBean employeeBean) throws SQLException {
-		 String sql = "select bankBranchNo,bankBranchName from lycdb.bank_barnch_master where BankCode = ? and bankBranchName = ? or bankBranchNo=?";	
+		 String sql = "select bankBranchNo,bankBranchName from lycdb.bank_barnch_master where BankCode = ? and (bankBranchName = ? or bankBranchNo=?)";	
 	        PreparedStatement pre =conn.prepareStatement(sql);
 	        pre.setString(1, employeeBean.getBankNo());
 	        pre.setString(2, employeeBean.getBankBranchName());
@@ -308,7 +315,7 @@ public class EmployeeInfoManageSql {
 				!employeeBean.getPassword().equals("")||
 				employeeBean.getAuthorityCode()!=-1) 
 				{
-				sql="update lycdb.employee set";
+				sql="update lycdb.employee set ";
 				if(!employeeBean.getEmployeeName().equals("")) {
 					 sql=sql+"employeeName ='"+employeeBean.getEmployeeName()+"'";
 					 first=true;
@@ -344,7 +351,7 @@ public class EmployeeInfoManageSql {
 				!employeeBean.getDependentsPerson().equals(-1)||
 				employeeBean.getSalary()!=null)
 				{
-				sql="update lycdb.employee_detail set";
+				sql="update lycdb.employee_detail set ";
 				if(employeeBean.getGenderNo()!=null) {
 					 sql=sql+"genderCode ='"+employeeBean.getGenderNo()+"'";
 					 first=true;
@@ -417,7 +424,7 @@ public class EmployeeInfoManageSql {
 				!employeeBean.getSecondHalfOfAddress().equals("")||
 				!employeeBean.getNearestStation().equals(""))
 				{
-				sql="update lycdb.account_information set";
+				sql="update lycdb.account_information set ";
 				if(!employeeBean.getPostalCode1().equals("")) {
 					 sql=sql+"postalCode ='"+employeeBean.getPostalCode1()+ employeeBean.getPostalCode2()+"'";
 					 first=true;
@@ -454,7 +461,7 @@ public class EmployeeInfoManageSql {
 				employeeBean.getAccountNo()!=null||
 				employeeBean.getAccountName()!=null)
 				{
-				sql="update lycdb.account_information set";
+				sql="update lycdb.account_information set ";
 				if(!employeeBean.getBankNo().equals("0")) {
 					 sql=sql+"bankCode ='"+employeeBean.getPostalCode1()+ employeeBean.getBankNo()+"'";
 					 first=true;

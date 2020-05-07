@@ -44,7 +44,7 @@
 				<td>社員番号:<input type="text" name="empid1" id="empid1" class="setbluetext" size="10" maxlength=6>OR　　社員名<input type="text" name="empname1" id="empname1" class="setbluetext" size="10" maxlength=10><span id="empid1err" class="err"></span></td>
 			</tr>
 			<tr>
-				<td>社員番号範囲:lyc<input type="text" name="empid1_1" id="empid1_1" class="setbluetext" size="5" maxlength=3>~<input type="text" name="empid1_2" id="empid1_2" class="setbluetext" size="5" maxlength=3></td>
+				<td>社員番号範囲:lyc<input type="text" name="empid1_1" id="empid1_1" class="setbluetext" size="5" maxlength=3>~<input type="text" name="empid1_2" id="empid1_2" class="setbluetext" size="5" maxlength=3><span id="empidhanierr" class="err"></span></td>
 			</tr>
 		</table>
 		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:10px;">
@@ -56,7 +56,7 @@
 			<tr>
 				<td>社員番号:</td><td><input type="text" name="empid2" id="empid2" class="setbluetext" size="10" maxlength=6></td>
 			<tr>
-				<td>社員名:</td><td><input type="text" name="empname2" id="empname2" class="setbluetext" size="10" maxlength=6></td>
+				<td>社員名:</td><td><input type="text" name="empname2" id="empname2" class="setbluetext" size="10" maxlength=10></td>
 			</tr>
 			<tr>
 				<td>性別:</td>
@@ -66,7 +66,7 @@
 						<option value="1" >女</option>
 					</select>
 				</td>
-				<td>年齢:<input type="text" name="Age" id="Age" class="setbluetext" size="3" maxlength=2><input type="date"  name="Calendar" id="Calendar" onchange="setage()" value="カレンダー" maxlength=8 min="1900-01-01" max="2020-01-01"></td>
+				<td>年齢:<input type="text" name="Age" id="Age" class="setbluetext" size="3" maxlength=2><input type="date"  name="Calendar" id="Calendar" onchange="setage()" value="カレンダー" maxlength=8></td>
 			</tr>
 			<tr>
 				<td>入社年月:</td>
@@ -119,7 +119,7 @@
 		</table>
 		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:10px;">
 			<tr>
-				<td>初期パスワード:</td><td><input type="text" name="password" id="password"  class="setbluetext" size="10" maxlength=12><font class="mark" color="red">★</font><span id="passworderr" class="err"></span></td>
+				<td>初期パスワード:</td><td><input type="password" name="password" id="password"  class="setbluetext" size="10" maxlength=12><font class="mark" color="red">★</font><span id="passworderr" class="err"></span></td>
 			</tr>
 			<tr>
 				<td>社用メールアドレス:</td><td><input type="text" name="CompanyMail" id="CompanyMail"  class="setbluetext" size="10" maxlength=20>＠lyc.co.jp<span id="CompanyMailerr" class="err"></span></td>
@@ -149,9 +149,9 @@
 			</tr>
 			<tr>
 				<td>郵便番号:〒
-					<input type="text" name="PostalCode1" id="PostalCode1" class="setbluetext" onmouseleave="PostalCodechange()" pattern="[0-9]" size="3" maxlength=3>-
-					<input type="text" name="PostalCode2" id="PostalCode2" class="setbluetext" onmouseleave="PostalCodechange()" pattern="[0-9]" size="4" maxlength=4>
-					<input type="button" onclick="PostalCode()" value="検索" class="setbluebtn">
+					<input type="text" name="PostalCode1" id="PostalCode1" class="setbluetext" onchange="PostalCodechange()" pattern="[0-9]" size="3" maxlength=3>-
+					<input type="text" name="PostalCode2" id="PostalCode2" class="setbluetext" onchange="PostalCodechange()" pattern="[0-9]" size="4" maxlength=4>
+					<input type="button" onclick="PostalCode()" id="PostSearch" value="検索" class="setbluebtn">
 					<span id="empid3err" class="err"></span>
 				</td>
 			</tr>
@@ -162,13 +162,15 @@
 				<td>以降の住所:<input type="text" name="SecondHalfOfAddress" id="SecondHalfOfAddress" class="setbluetext" size="20" maxlength=20></td>
 			</tr>
 			<tr>
-				<td>最寄駅:<input type="text" name="NearestStation" id="NearestStation" class="setbluetext" size="5" maxlength=10></td>
+				<td>最寄駅:<input type="text" name="NearestStation" id="NearestStation" class="setbluetext" size="5" maxlength=20></td>
 			</tr>
 		</table>
 		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:10px;">
 			<tr>
 				<td><font size=4><b>口座情報</b></font><span id="empid2err" class="err"></span></td>
 			</tr>
+		</table>
+		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:10px;">
 			<tr>
 				<td>
 					銀行名:
@@ -186,7 +188,7 @@
 				<td>支店番号:<input type="text" name="BankBranchCode" id="BankBranchCode" onblur="BankBranch(1)" class="setbluetext" size="4" pattern="[0-9]" maxlength=20></td>
 			</tr>
 			<tr>
-				<td>口座番号:<input type="text" name="AccountNo" id="AccountNo" class="setbluetext" size="5" maxlength=10></td><td>口座名義人:<input type="text" pattern="[0-9]" name="AccountName" id="AccountName" class="setbluetext" size="5" maxlength=10></td>
+				<td>口座番号:<input type="text" name="AccountNo" id="AccountNo" class="setbluetext" size="5" maxlength=7></td><td>口座名義人:<input type="text" pattern="[0-9]" name="AccountName" placeholder="タナカ" id="AccountName" class="setbluetext" size="5" maxlength=20></td>
 			</tr>
 		</table>
 		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:70px;left: 30%;">
@@ -195,6 +197,6 @@
 			</tr>
 		</table>
 	</div>
-	<p style="margin-left:110px;margin-top:1000px"><a href="javascript:history.go(-1);">＜＜前画面に戻る</a></p>
+	<p style="margin-left:110px;margin-top:1000px"><a href="SubMenuCheck.jsp">＜＜前画面に戻る</a></p>
 </body>
 </html>
