@@ -150,7 +150,7 @@ public class EmployeeInfoManageSql {
 			//追加
 			try {
 				//テーブルemployee
-				String sql= "insert into employee values(?,?,MD5(?),?,now(),now())";
+				String sql= "insert into lycdb.employee values(?,?,MD5(?),?,now(),now())";
 				PreparedStatement pre =conn.prepareStatement(sql);
 				conn.setAutoCommit(false);
 				pre.setString(1,employeeBean.getEmployeeNo());
@@ -173,7 +173,7 @@ public class EmployeeInfoManageSql {
 				pre.setInt(10,employeeBean.getSalary());
 				pre.executeUpdate();
 				//テーブルaddress_information
-				sql = "insert into address_information values(?,?,?,?,?,now(),now())";
+				sql = "insert into lycdb.address_information values(?,?,?,?,?,now(),now())";
 				pre =conn.prepareStatement(sql);
 				pre.setString(1,employeeBean.getEmployeeNo());
 				pre.setString(2,employeeBean.getPostalCode1()+ employeeBean.getPostalCode2());
@@ -183,7 +183,7 @@ public class EmployeeInfoManageSql {
 
 				pre.executeUpdate();
 				//テーブルaccount_information	
-				sql = "insert into account_information values(?,?,?,?,?,now(), now())";
+				sql = "insert into lycdb.account_information values(?,?,?,?,?,now(), now())";
 				pre =conn.prepareStatement(sql);
 				pre.setString(1,employeeBean.getEmployeeNo());		    
 				pre.setString(2,employeeBean.getBankNo());		
@@ -267,22 +267,25 @@ public class EmployeeInfoManageSql {
 				PreparedStatement pre =conn.prepareStatement(sql);
 				conn.setAutoCommit(false);
 				pre.setString(1,employeeBean.getEmployeeNo());
-				pre.executeUpdate();
+				pre.execute();
 				//テーブルemployee_detail
 				sql = "delete from lycdb.employee_detail where employeeNo = ?";	
 				pre =conn.prepareStatement(sql);
+				conn.setAutoCommit(false);
 				pre.setString(1,employeeBean.getEmployeeNo());
-				pre.executeUpdate();
+				pre.execute();
 				//テーブルaddress_information
-				sql = "delete from address_information where employeeNo = ?";
+				sql = "delete from lycdb.address_information where employeeNo = ?";
 				pre =conn.prepareStatement(sql);
+				conn.setAutoCommit(false);
 				pre.setString(1,employeeBean.getEmployeeNo());
-				pre.executeUpdate();
+				pre.execute();
 				//テーブルaccount_information	
-				sql = "delete from account_information vwhere employeeNo = ?";
+				sql = "delete from lycdb.account_information where employeeNo = ?";
 				pre =conn.prepareStatement(sql);
+				conn.setAutoCommit(false);
 				pre.setString(1,employeeBean.getEmployeeNo());
-				pre.executeUpdate();
+				pre.execute();
 				conn.commit();	 
 			    db.closeConn();
 			}
@@ -497,7 +500,7 @@ public class EmployeeInfoManageSql {
 	return employeePojo;
 	}
     public EmployeePojo selectMaxMinEmployeeofDB() throws SQLException {
-        String sql = "select min(employeeNo) as minemployeeNo, max(employeeNo) as maxemployeeNo from employee;";
+        String sql = "select min(employeeNo) as minemployeeNo, max(employeeNo) as maxemployeeNo from lycdb.employee;";
         PreparedStatement pre =conn.prepareStatement(sql);
         ResultSet rs =pre.executeQuery();
         while (rs.next()) {

@@ -64,7 +64,6 @@
 					<select name="genderNo"  id = "genderNo" class="setbluetext">
 						<option selected value="0">男</option>
 						<option value="1" >女</option>
-						<option value="-1" ></option>
 					</select>
 				</td>
 				<td>年齢:<input type="text" name="Age" id="Age" class="setbluetext" size="3" maxlength=2><input type="date"  name="Calendar" id="Calendar" onchange="setage()" value="カレンダー" maxlength=8 min="1900-01-01" max="2020-01-01"></td>
@@ -113,7 +112,6 @@
 						<option value="3" >3</option>
 						<option value="4" >4</option>
 						<option value="5" >5</option>
-						<option value="-1" ></option>
 					</select>
 				</td>
 				<td>給料:<input type="text" name="Salary" id="Salary" onfocus="SalaryIn()" onblur="SalaryOut()" class="setbluetext" size="5" maxlength=6>円<span id="Salaryerr" class="err"></span></td>
@@ -140,7 +138,6 @@
 					<select name="AuthorityNo" id="AuthorityNo" class="setbluetext" >
 						<option selected value="0">社員</option>
 						<option value="1" >管理者</option>
-						<option value="-1" ></option>
 					</select>
 					<font class="mark" color="red">★</font>
 				</td>

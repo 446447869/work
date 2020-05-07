@@ -2,10 +2,14 @@
  * 
  */
 function ClickBtn(num){
+	$(".mark").text("★");
 	$("input:button[id^='btn']").removeClass("setgreenbtn");
 	$("input:button[id^='btn']").addClass("setbluebtn");
 	$("#btn"+num).removeClass("setbluebtn");
 	$("#btn"+num).addClass("setgreenbtn");
+	$("#genderNo option[value='-1']").remove();
+	$("#AuthorityNo option[value='-1']").remove();
+	$("#DependentsPerson option[value='-1']").remove();
 	$("input:text").removeClass("errtext");
 	$("input:text").addClass("setbluetext");
 	$("select").removeClass("errtext");
@@ -45,6 +49,9 @@ function ClickBtn(num){
 		$("#empid1_1").attr('disabled',true);
 		$("#empid1_2").attr('disabled',true);
 		$("#empid2").attr('disabled',true);
+		$("#genderNo option[value='-1']").remove();
+		$("#AuthorityNo option[value='-1']").remove();
+		$("#DependentsPerson option[value='-1']").remove();
 		if($("#empid1").val()=="" && $("#empname1").val()==""){
 			$("#empid1err").html(MSG005)
 			$("empid1").removeClass("errtext");
@@ -90,7 +97,7 @@ function ClickBtn(num){
 						$("#PhoneNo2").val(json.employeePojo.phoneNo2);
 						$("#PhoneNo3").val(json.employeePojo.phoneNo3);
 						$("#AuthorityNo").val(json.employeePojo.authorityNo);
-						$("#GenderNo").val(json.employeePojo.genderNo);
+						$("#genderNo").val(json.employeePojo.genderNo);
 						$("#DependentsPerson").val(json.employeePojo.dependentsPerson);
 						$("#Salary").val(json.employeePojo.salary);
 						$("#PostalCode1").val(json.employeePojo.postalCode1);
@@ -116,6 +123,9 @@ function ClickBtn(num){
 		$("#empid1_1").attr('disabled',true);
 		$("#empid1_2").attr('disabled',true);
 		$("#empid2").attr('disabled',true);
+		$("#genderNo option[value='-1']").remove();
+		$("#AuthorityNo option[value='-1']").remove();
+		$("#DependentsPerson option[value='-1']").remove();
 		if($("#empid1").val()=="" && $("#empname1").val()==""){
 			$("#empid1err").html(MSG005)
 			$("empid1").removeClass("errtext");
@@ -164,7 +174,7 @@ function ClickBtn(num){
 						$("#PhoneNo2").val(json.employeePojo.phoneNo2);
 						$("#PhoneNo3").val(json.employeePojo.phoneNo3);
 						$("#AuthorityNo").val(json.employeePojo.authorityNo);
-						$("#GenderNo").val(json.employeePojo.genderNo);
+						$("#genderNo").val(json.employeePojo.genderNo);
 						$("#DependentsPerson").val(json.employeePojo.dependentsPerson);
 						$("#Salary").val(json.employeePojo.salary);
 						$("#PostalCode1").val(json.employeePojo.postalCode1);
@@ -187,6 +197,9 @@ function ClickBtn(num){
 	}
 	else if(num==4){
 		//一括修正
+		$("#genderNo").append("<option value='-1'></option>");
+		$("#AuthorityNo").append("<option value='-1'></option>");
+		$("#DependentsPerson").append("<option value='-1'></option>");
 		var minNo=$("#empid1_1").val();
 		var maxNo=$("#empid1_2").val();
 		if(minNo==""){
@@ -242,7 +255,7 @@ function ClickBtn(num){
 					$("#empid2").attr('disabled',true);
 					$(".mark").text("");
 					$("#AuthorityNo").val(-1);
-					$("#GenderNo").val(-1);
+					$("#genderNo").val(-1);
 					$("#DependentsPerson").val(-1);
 			}
 		});
@@ -340,58 +353,58 @@ function enter(){
 				$("#PhoneNo3").removeClass("setbluetext");
 				$("#PhoneNo3").addClass("errtext");
 		    	stop=true;
+			    }
+			}
+		    if(($("#JoiningCompanyOfYear").val()=="0")!=($("#IntoCompanyOfMonth").val()=="0")){
+				$("#IntoCompanyerr").html(MSG010);
+		    	$("#PhoneNoerr").html(MSG011);
+				$("#JoiningCompanyOfYear").removeClass("setbluetext");
+				$("#JoiningCompanyOfYear").addClass("errtext");
+				$("#IntoCompanyOfMonth").removeClass("setbluetext");
+				$("#IntoCompanyOfMonth").addClass("errtext");
+				stop=true;
 		    }
-		}
-	    if(($("#JoiningCompanyOfYear").val()=="0")!=($("#IntoCompanyOfMonth").val()=="0")){
-			$("#IntoCompanyerr").html(MSG010);
-	    	$("#PhoneNoerr").html(MSG011);
-			$("#JoiningCompanyOfYear").removeClass("setbluetext");
-			$("#JoiningCompanyOfYear").addClass("errtext");
-			$("#IntoCompanyOfMonth").removeClass("setbluetext");
-			$("#IntoCompanyOfMonth").addClass("errtext");
-			stop=true;
-	    }
-	    if($("#PostalCode1").val().length!=0||$("#PostalCode2").val().length!=0){
-		    if($("#PostalCode1").val().length<3||$("#PostalCode2").val().length<4){
-			 	$("#empid3err").html(MSG020);
-				$("#PostalCode1").removeClass("setbluetext");
-				$("#PostalCode1").addClass("errtext");
-				$("#PostalCode2").removeClass("setbluetext");
-				$("#PostalCode2").addClass("errtext");	 	
+		    if($("#PostalCode1").val().length!=0||$("#PostalCode2").val().length!=0){
+			    if($("#PostalCode1").val().length<3||$("#PostalCode2").val().length<4){
+				 	$("#empid3err").html(MSG020);
+					$("#PostalCode1").removeClass("setbluetext");
+					$("#PostalCode1").addClass("errtext");
+					$("#PostalCode2").removeClass("setbluetext");
+					$("#PostalCode2").addClass("errtext");	 	
+					stop=true;
+				}
+		    }
+		    if((isNaN($("#AccountNo").val())&&$("#AccountNo").val()!="")||(isNaN($("#BankBranchCode").val())&&$("#BankBranchCode").val()!="")){
+			 	$("#empid2err").html(MSG015);
+				$("#AccountNo").removeClass("setbluetext");
+				$("#AccountNo").addClass("errtext");
+				$("#BankBranchCode").removeClass("setbluetext");
+				$("#BankBranchCode").addClass("errtext");	 	 	
 				stop=true;
 			}
-	    }
-	    if((isNaN($("#AccountNo").val())&&$("#AccountNo").val()!="")||(isNaN($("#BankBranchCode").val())&&$("#BankBranchCode").val()!="")){
-		 	$("#empid2err").html(MSG015);
-			$("#AccountNo").removeClass("setbluetext");
-			$("#AccountNo").addClass("errtext");
-			$("#BankBranchCode").removeClass("setbluetext");
-			$("#BankBranchCode").addClass("errtext");	 	 	
-			stop=true;
-		}
-	    else if(!katakana.test($("#AccountName").val())&&$("#AccountName").val()!=""){
-	    	$("#empid2err").html(MSG017);
-			$("#AccountName").removeClass("setbluetext");
-			$("#AccountName").addClass("errtext");	
-			stop=true;
-	    }
-	    else if($("#BankNo").val()=="0"){
-	    	if($("#BankBranchCode").val()!=""||
-			$("#BankBranchName").val()!=""||
-			$("#AccountNo").val()!=""||
-			$("#AccountName").val()!=""){
-				$("#empid2err").html(MSG017);
-				$("#BankNo").removeClass("setbluetext");
-				$("#BankNo").addClass("errtext");
-				$("#BankBranchCode").removeClass("setbluetext");
-				$("#BankBranchCode").addClass("errtext");	 
-				$("#BankBranchName").removeClass("setbluetext");
-				$("#BankBranchName").addClass("errtext");
-				$("#AccountNo").removeClass("setbluetext");
-				$("#AccountNo").addClass("errtext");	 
+		    else if(!katakana.test($("#AccountName").val())&&$("#AccountName").val()!=""){
+		    	$("#empid2err").html(MSG017);
 				$("#AccountName").removeClass("setbluetext");
-				$("#AccountName").addClass("errtext");	 
+				$("#AccountName").addClass("errtext");	
 				stop=true;
+		    }
+		    else if($("#BankNo").val()=="0"){
+		    	if($("#BankBranchCode").val()!=""||
+				$("#BankBranchName").val()!=""||
+				$("#AccountNo").val()!=""||
+				$("#AccountName").val()!=""){
+					$("#empid2err").html(MSG017);
+					$("#BankNo").removeClass("setbluetext");
+					$("#BankNo").addClass("errtext");
+					$("#BankBranchCode").removeClass("setbluetext");
+					$("#BankBranchCode").addClass("errtext");	 
+					$("#BankBranchName").removeClass("setbluetext");
+					$("#BankBranchName").addClass("errtext");
+					$("#AccountNo").removeClass("setbluetext");
+					$("#AccountNo").addClass("errtext");	 
+					$("#AccountName").removeClass("setbluetext");
+					$("#AccountName").addClass("errtext");	 
+					stop=true;
 	    	}
 	    }
 	    else if($("#BankNo").val()!="0"){
@@ -587,7 +600,7 @@ function enter(){
     					"employeeBean.PhoneNo1":$("#PhoneNo1").val(),
     					"employeeBean.PhoneNo2":$("#PhoneNo2").val(),
     					"employeeBean.PhoneNo3":$("#PhoneNo3").val(),
-    					"employeeBean.GenderNo":$("#GenderNo").val(),
+    					"employeeBean.GenderNo":$("#genderNo").val(),
     					"employeeBean.DependentsPerson":$("#DependentsPerson").val(),
     					"employeeBean.Salary":$("#Salary").val(),
     					"employeeBean.FirstHalfOfAddress":$("#FirstHalfOfAddress").val(),
@@ -635,7 +648,7 @@ function enter(){
     					"employeeBean.PhoneNo1":$("#PhoneNo1").val(),
     					"employeeBean.PhoneNo2":$("#PhoneNo2").val(),
     					"employeeBean.PhoneNo3":$("#PhoneNo3").val(),
-    					"employeeBean.GenderNo":$("#GenderNo").val(),
+    					"employeeBean.GenderNo":$("#genderNo").val(),
     					"employeeBean.DependentsPerson":$("#DependentsPerson").val(),
     					"employeeBean.Salary":$("#Salary").val(),
     					"employeeBean.FirstHalfOfAddress":$("#FirstHalfOfAddress").val(),
@@ -665,8 +678,7 @@ function enter(){
     			dataType:"json",
     			async:false,
     			data: { "employeeBean.button":sessionStorage.getItem('button'),
-    					"employeeBean.employeeNo1":$("#empid1_1").val(),
-    					"employeeBean.employeeNo1":$("#empid1_2").val(),
+    					"employeeBean.employeeNo":$("#empid2").val(),
     					"employeeBean.employeeName":$("#empname2").val(),
     					"employeeBean.password":$("#password").val(),
     					"employeeBean.authorityCode":$("#AuthorityNo").val(),
@@ -685,7 +697,7 @@ function enter(){
     					"employeeBean.PhoneNo1":$("#PhoneNo1").val(),
     					"employeeBean.PhoneNo2":$("#PhoneNo2").val(),
     					"employeeBean.PhoneNo3":$("#PhoneNo3").val(),
-    					"employeeBean.GenderNo":$("#GenderNo").val(),
+    					"employeeBean.GenderNo":$("#genderNo").val(),
     					"employeeBean.DependentsPerson":$("#DependentsPerson").val(),
     					"employeeBean.Salary":$("#Salary").val(),
     					"employeeBean.FirstHalfOfAddress":$("#FirstHalfOfAddress").val(),
@@ -780,7 +792,7 @@ function enter(){
 		    					"employeeBean.PhoneNo1":$("#PhoneNo1").val(),
 		    					"employeeBean.PhoneNo2":$("#PhoneNo2").val(),
 		    					"employeeBean.PhoneNo3":$("#PhoneNo3").val(),
-		    					"employeeBean.GenderNo":$("#GenderNo").val(),
+		    					"employeeBean.GenderNo":$("#genderNoNo").val(),
 		    					"employeeBean.DependentsPerson":$("#DependentsPerson").val(),
 		    					"employeeBean.Salary":$("#Salary").val(),
 		    					"employeeBean.FirstHalfOfAddress":$("#FirstHalfOfAddress").val(),
