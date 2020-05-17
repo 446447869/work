@@ -58,3 +58,9 @@ input:focus::-webkit-input-placeholder{
             text-indent: -999em;
             z-index: -20;
         }
+*.cell{
+	font-size:small;
+	border-collapse: collapse;
+	border-color:black;
+	background-color:#3498DB;
+	}

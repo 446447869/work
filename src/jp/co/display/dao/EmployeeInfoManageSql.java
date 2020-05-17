@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+
+import org.apache.commons.lang3.StringUtils;
 
 import DbConn.DBConn;
 import jp.co.display.bean.EmployeeBean;
@@ -100,9 +103,11 @@ public class EmployeeInfoManageSql {
         	
         	employeePojo.setPersonalMail(rs.getString("personalMail"));
         	if(rs.getString("phoneNo")!=null){
-            	employeePojo.setPhoneNo1(rs.getString("phoneNo").substring(0,3));
-            	employeePojo.setPhoneNo2(rs.getString("phoneNo").substring(3,7));
-            	employeePojo.setPhoneNo3(rs.getString("phoneNo").substring(7,11));	
+        		if(rs.getString("phoneNo").length()==11){
+	            	employeePojo.setPhoneNo1(rs.getString("phoneNo").substring(0,3));
+	            	employeePojo.setPhoneNo2(rs.getString("phoneNo").substring(3,7));
+	            	employeePojo.setPhoneNo3(rs.getString("phoneNo").substring(7,11));	
+        		}
         	}
         	employeePojo.setAuthorityNo(rs.getInt("authorityNo"));
         	employeePojo.setGenderNo(rs.getInt("genderNo"));
@@ -170,14 +175,24 @@ public class EmployeeInfoManageSql {
 				pre =conn.prepareStatement(sql);
 				pre.setString(1,employeeBean.getEmployeeNo());
 				pre.setInt(2,employeeBean.getGenderNo());
-				pre.setInt(3,employeeBean.getAge());
+				if (employeeBean.getAge() == null) {
+					pre.setNull(3,Types.INTEGER);
+				}
+				else{
+					pre.setInt(3,employeeBean.getAge());
+				}			
 				pre.setString(4,employeeBean.getJoiningCompanyOfYear());
 				pre.setString(5,employeeBean.getIntoCompanyOfMonth());
 				pre.setString(6,employeeBean.getCompanyMail()+"@lyc.co.jp");
 				pre.setString(7,employeeBean.getPersonalMail());
 				pre.setString(8,employeeBean.getPhoneNo1()+employeeBean.getPhoneNo2()+employeeBean.getPhoneNo3());
-				pre.setInt(9,employeeBean.getDependentsPerson());        
-				pre.setInt(10,employeeBean.getSalary());
+				pre.setInt(9,employeeBean.getDependentsPerson());  
+				if (employeeBean.getSalary() == null) {
+					pre.setNull(10,Types.INTEGER);
+				}
+				else{
+					pre.setInt(10,employeeBean.getSalary());
+				}
 				pre.executeUpdate();
 				//テーブルaddress_information
 				sql = "insert into lycdb.address_information values(?,?,?,?,?,now(),now())";
@@ -221,42 +236,60 @@ public class EmployeeInfoManageSql {
 				sql=sql+",authorityCode ='"+employeeBean.getAuthorityCode()+"',updateTime= now() where employeeNo ='"+employeeBean.getEmployeeNo()+"'and updateTime='"+employeeBean.getUpdateTime()+"';";
 				PreparedStatement pre =conn.prepareStatement(sql);
 				conn.setAutoCommit(false);
-				pre.executeUpdate();
-				//テーブルemployee_detail
-				sql="update lycdb.employee_detail set genderCode = ?,age= ?,JoiningCompanyOfYear= ?,intoCompanyOfMonth= ?,companyMail= ? , personalMail = ?, phoneNo = ?,dependentsPerson = ?,salary = ?,updateTime=now() where employeeNo = ?";
-				pre =conn.prepareStatement(sql);
-				pre.setInt(1,employeeBean.getGenderNo());
-				pre.setInt(2,employeeBean.getAge());
-				pre.setString(3,employeeBean.getJoiningCompanyOfYear());
-				pre.setString(4,employeeBean.getIntoCompanyOfMonth());
-				pre.setString(5,employeeBean.getCompanyMail()+"@lyc.co.jp");
-				pre.setString(6,employeeBean.getPersonalMail());
-				pre.setString(7,employeeBean.getPhoneNo1()+employeeBean.getPhoneNo2()+employeeBean.getPhoneNo3());
-				pre.setInt(8,employeeBean.getDependentsPerson());        
-				pre.setInt(9,employeeBean.getSalary());
-				pre.setString(10,employeeBean.getEmployeeNo());
-				pre.executeUpdate();
-				//テーブルaddress_information
-				sql ="update lycdb.address_information set postalCode = ? ,firstHalfOfAddress = ?,secondHalfOfAddress = ?,nearestStation = ?,updateTime=now() where employeeNo = ?";
-				pre =conn.prepareStatement(sql);
-				pre.setString(1,employeeBean.getPostalCode1()+ employeeBean.getPostalCode2());
-				pre.setString(2,employeeBean.getFirstHalfOfAddress());
-				pre.setString(3,employeeBean.getSecondHalfOfAddress());
-				pre.setString(4,employeeBean.getNearestStation());
-				pre.setString(5,employeeBean.getEmployeeNo());
-				pre.executeUpdate();
-				//テーブルaccount_information	
-				sql ="update lycdb.account_information set bankCode = ?,bankBranchCode = ?,accountNo = ?,accountName = ?,updateTime=now() where employeeNo = ?";
-				pre =conn.prepareStatement(sql);		    
-				pre.setString(1,employeeBean.getBankNo());		
-				pre.setString(2,employeeBean.getBankBranchCode());    		    
-				pre.setString(3,employeeBean.getAccountNo());
-				pre.setString(4,employeeBean.getAccountName());
-				pre.setString(5,employeeBean.getEmployeeNo());
-				pre.executeUpdate();
-				conn.commit();	 
-			    db.closeConn();
-			}
+				int haspre=pre.executeUpdate();
+				if (haspre==1) {
+					//テーブルemployee_detail
+					sql="update lycdb.employee_detail set genderCode = ?,age= ?,JoiningCompanyOfYear= ?,intoCompanyOfMonth= ?,companyMail= ? , personalMail = ?, phoneNo = ?,dependentsPerson = ?,salary = ?,updateTime=now() where employeeNo = ?";
+					pre =conn.prepareStatement(sql);
+					pre.setInt(1,employeeBean.getGenderNo());
+					if (employeeBean.getAge() == null) {
+						pre.setNull(2,Types.INTEGER);
+					}
+					else{
+						pre.setInt(2,employeeBean.getAge());
+					}
+					pre.setString(3,employeeBean.getJoiningCompanyOfYear());
+					pre.setString(4,employeeBean.getIntoCompanyOfMonth());
+					pre.setString(5,employeeBean.getCompanyMail()+"@lyc.co.jp");
+					pre.setString(6,employeeBean.getPersonalMail());
+					pre.setString(7,employeeBean.getPhoneNo1()+employeeBean.getPhoneNo2()+employeeBean.getPhoneNo3());
+					pre.setInt(8,employeeBean.getDependentsPerson());    
+					if (employeeBean.getSalary() == null) {
+						pre.setNull(9,Types.INTEGER);
+					}
+					else{
+						pre.setInt(9,employeeBean.getSalary());
+					}
+					pre.setString(10,employeeBean.getEmployeeNo());
+					pre.executeUpdate();
+					//テーブルaddress_information
+					sql ="update lycdb.address_information set postalCode = ? ,firstHalfOfAddress = ?,secondHalfOfAddress = ?,nearestStation = ?,updateTime=now() where employeeNo = ?";
+					pre =conn.prepareStatement(sql);
+					pre.setString(1,employeeBean.getPostalCode1()+ employeeBean.getPostalCode2());
+					pre.setString(2,employeeBean.getFirstHalfOfAddress());
+					pre.setString(3,employeeBean.getSecondHalfOfAddress());
+					pre.setString(4,employeeBean.getNearestStation());
+					pre.setString(5,employeeBean.getEmployeeNo());
+					pre.executeUpdate();
+					//テーブルaccount_information	
+					sql ="update lycdb.account_information set bankCode = ?,bankBranchCode = ?,accountNo = ?,accountName = ?,updateTime=now() where employeeNo = ?";
+					pre =conn.prepareStatement(sql);		    
+					pre.setString(1,employeeBean.getBankNo());		
+					pre.setString(2,employeeBean.getBankBranchCode());    		    
+					pre.setString(3,employeeBean.getAccountNo());
+					pre.setString(4,employeeBean.getAccountName());
+					pre.setString(5,employeeBean.getEmployeeNo());
+					pre.executeUpdate();
+					conn.commit();	 
+				    db.closeConn();
+				}
+				else {
+					employeePojo.setSucceed(false);
+					return employeePojo;
+				}
+				}
+				
+				
 			catch(SQLException e){
 				conn.rollback();
 				db.closeConn();
@@ -274,7 +307,7 @@ public class EmployeeInfoManageSql {
 				PreparedStatement pre =conn.prepareStatement(sql);
 				conn.setAutoCommit(false);
 				pre.setString(1,employeeBean.getEmployeeNo());
-				pre.execute();
+				int haspre=pre.executeUpdate();
 				//テーブルemployee_detail
 				sql = "delete from lycdb.employee_detail where employeeNo = ?";	
 				pre =conn.prepareStatement(sql);
@@ -295,6 +328,10 @@ public class EmployeeInfoManageSql {
 				pre.execute();
 				conn.commit();	 
 			    db.closeConn();
+				if (haspre<1) {
+					employeePojo.setSucceed(false);
+					return employeePojo;
+				}
 			}
 			catch(SQLException e){
 				conn.rollback();
@@ -311,16 +348,16 @@ public class EmployeeInfoManageSql {
 			String sql="";
 			boolean first=false;
 			conn.setAutoCommit(false);
-			if (!employeeBean.getEmployeeName().equals("")||
-				!employeeBean.getPassword().equals("")||
+			if (StringUtils.isNotBlank(employeeBean.getEmployeeName())||
+				StringUtils.isNotBlank(employeeBean.getPassword())||
 				employeeBean.getAuthorityCode()!=-1) 
 				{
 				sql="update lycdb.employee set ";
-				if(!employeeBean.getEmployeeName().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getEmployeeName())) {
 					 sql=sql+"employeeName ='"+employeeBean.getEmployeeName()+"'";
 					 first=true;
 				}
-				if (!employeeBean.getPassword().equals("")) {
+				if (StringUtils.isNotBlank(employeeBean.getPassword())) {
 					if(first) {
 					sql=sql+",";
 					}
@@ -334,7 +371,7 @@ public class EmployeeInfoManageSql {
 					sql=sql+"authorityCode ='"+employeeBean.getAuthorityCode()+"'";
 					first=true;
 				}
-				sql=sql+",updateTime= now() where employeeNo >'lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <'lyc"+employeeBean.getEmployeeNo2()+"';";
+				sql=sql+",updateTime= now() where employeeNo >='lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <='lyc"+employeeBean.getEmployeeNo2()+"';";
 				PreparedStatement pre =conn.prepareStatement(sql);
 				pre.executeUpdate();
 			}
@@ -345,9 +382,9 @@ public class EmployeeInfoManageSql {
 				employeeBean.getAge()!=null||
 				!employeeBean.getJoiningCompanyOfYear().equals("0")||
 				!employeeBean.getIntoCompanyOfMonth().equals("0")||
-				!employeeBean.getCompanyMail().equals("")||
-				!employeeBean.getPersonalMail().equals("")||
-				!employeeBean.getPhoneNo1().equals("")||
+				StringUtils.isNotBlank(employeeBean.getCompanyMail())||
+				StringUtils.isNotBlank(employeeBean.getPersonalMail())||
+				StringUtils.isNotBlank(employeeBean.getPhoneNo1())||
 				!employeeBean.getDependentsPerson().equals(-1)||
 				employeeBean.getSalary()!=null)
 				{
@@ -377,21 +414,21 @@ public class EmployeeInfoManageSql {
 					 sql=sql+"intoCompanyOfMonth ='"+employeeBean.getIntoCompanyOfMonth()+"'";
 					 first=true;
 				}		
-				if(!employeeBean.getCompanyMail().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getCompanyMail())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"companyMail ='"+employeeBean.getCompanyMail()+"'";
 					 first=true;
 				}	
-				if(!employeeBean.getPersonalMail().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getPersonalMail())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"personalMail ='"+employeeBean.getPersonalMail()+"'";
 					 first=true;
 				}
-				if(!employeeBean.getPhoneNo1().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getPhoneNo1())) {
 					if(first) {
 					sql=sql+",";
 					}	
@@ -412,82 +449,82 @@ public class EmployeeInfoManageSql {
 					 sql=sql+"salary ='"+employeeBean.getSalary()+"'";
 					 first=true;
 				}
-				sql=sql+",updateTime= now() where employeeNo >'lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <'lyc"+employeeBean.getEmployeeNo2()+"';";
+				sql=sql+",updateTime= now() where employeeNo >='lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <='lyc"+employeeBean.getEmployeeNo2()+"';";
 				PreparedStatement pre =conn.prepareStatement(sql);
 				pre.executeUpdate();
 			}
 		
 			//テーブルaddress_information
 			first=false;
-			if (!employeeBean.getPostalCode1().equals("")||
-				!employeeBean.getFirstHalfOfAddress().equals("")||
-				!employeeBean.getSecondHalfOfAddress().equals("")||
-				!employeeBean.getNearestStation().equals(""))
+			if (StringUtils.isNotBlank(employeeBean.getPostalCode1())||
+				StringUtils.isNotBlank(employeeBean.getFirstHalfOfAddress())||
+				StringUtils.isNotBlank(employeeBean.getSecondHalfOfAddress())||
+				StringUtils.isNotBlank(employeeBean.getNearestStation()))
 				{
 				sql="update lycdb.account_information set ";
-				if(!employeeBean.getPostalCode1().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getPostalCode1())) {
 					 sql=sql+"postalCode ='"+employeeBean.getPostalCode1()+ employeeBean.getPostalCode2()+"'";
 					 first=true;
 				}
-				if(!employeeBean.getFirstHalfOfAddress().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getFirstHalfOfAddress())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"firstHalfOfAddress ='"+employeeBean.getFirstHalfOfAddress()+"'";
 					 first=true;
 				}
-				if(!employeeBean.getSecondHalfOfAddress().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getSecondHalfOfAddress())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"secondHalfOfAddress ='"+employeeBean.getSecondHalfOfAddress()+"'";
 					 first=true;
 				}
-				if(!employeeBean.getNearestStation().equals("")) {
+				if(StringUtils.isNotBlank(employeeBean.getNearestStation())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"nearestStation ='"+employeeBean.getNearestStation()+"'";
 					 first=true;
 				}			
-				sql=sql+",updateTime= now() where employeeNo >'lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <'lyc"+employeeBean.getEmployeeNo2()+"';";
+				sql=sql+",updateTime= now() where employeeNo >='lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <='lyc"+employeeBean.getEmployeeNo2()+"';";
 				PreparedStatement pre =conn.prepareStatement(sql);
 				pre.executeUpdate();
 			}
 			//テーブルaccount_information	
 			first=false;
 			if (!employeeBean.getBankNo().equals("0")||
-				employeeBean.getBankBranchCode()!=null||
-				employeeBean.getAccountNo()!=null||
-				employeeBean.getAccountName()!=null)
+				StringUtils.isNotBlank(employeeBean.getBankBranchCode())||
+				StringUtils.isNotBlank(employeeBean.getAccountNo())||
+				StringUtils.isNotBlank(employeeBean.getAccountName()))
 				{
 				sql="update lycdb.account_information set ";
 				if(!employeeBean.getBankNo().equals("0")) {
 					 sql=sql+"bankCode ='"+employeeBean.getPostalCode1()+ employeeBean.getBankNo()+"'";
 					 first=true;
 				}
-				if(employeeBean.getBankBranchCode()!=null) {
+				if(StringUtils.isNotBlank(employeeBean.getBankBranchCode())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"bankBranchCode ='"+employeeBean.getBankBranchCode()+"'";
 					 first=true;
 				}
-				if(employeeBean.getAccountNo()!=null) {
+				if(StringUtils.isNotBlank(employeeBean.getAccountNo())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"accountNo ='"+employeeBean.getAccountNo()+"'";
 					 first=true;
 				}
-				if(employeeBean.getAccountName()!=null) {
+				if(StringUtils.isNotBlank(employeeBean.getAccountName())) {
 					if(first) {
 					sql=sql+",";
 					}	
 					 sql=sql+"accountName ='"+employeeBean.getAccountName()+"'";
 					 first=true;
 				}			
-				sql=sql+",updateTime= now() where employeeNo >'lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <'lyc"+employeeBean.getEmployeeNo2()+"';";
+				sql=sql+",updateTime= now() where employeeNo >='lyc"+employeeBean.getEmployeeNo1()+"'and employeeNo <='lyc"+employeeBean.getEmployeeNo2()+"';";
 				PreparedStatement pre =conn.prepareStatement(sql);
 				pre.executeUpdate();
 			}

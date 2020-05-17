@@ -174,7 +174,7 @@
 			<tr>
 				<td>
 					銀行名:
-					<select name="BankNo" id="BankNo" onchange="bank()"class="setbluetext">
+					<select name="BankNo" id="BankNo" onchange="bank(true)"class="setbluetext">
 						<option selected value="0"></option>
 						<option value="1" >三菱東京UFJ銀行</option>
 						<option value="2" >みずほ銀行</option>

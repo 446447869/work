@@ -83,20 +83,22 @@ function ClickBtn(num){
 				success:function(json){
 					if (json.employeePojo.peopleNum<1){
 						$("#empid1err").html(MSG005)
-						$("empid1").removeClass("setbluetext");
-						$("empid1").addClass("errtext");
-						$("empname1").removeClass("setbluetext");
-						$("empname1").addClass("errtext");
+						$("#empid1").removeClass("setbluetext");
+						$("#empid1").addClass("errtext");
+						$("#empname1").removeClass("setbluetext");
+						$("#empname1").addClass("errtext");
 					}
 					else if(json.employeePojo.peopleNum>1){
 						$("#empid1err").html(MSG018)
-						$("empid1").removeClass("setbluetext");
-						$("empid1").addClass("errtext");
-						$("empname1").removeClass("setbluetext");
-						$("empname1").addClass("errtext");
+						$("#empid1").removeClass("setbluetext");
+						$("#empid1").addClass("errtext");
+						$("#empname1").removeClass("setbluetext");
+						$("#empname1").addClass("errtext");
 					}
 					else{
 						$("input:text").attr('disabled',false);
+						$("#empid1_1").attr('disabled',true);
+						$("#empid1_2").attr('disabled',true);
 						$("#empid2").attr('disabled',true);
 						$("#Enter").attr('disabled',false);
 						$("#FirstHalfOfAddress").attr('disabled',true);
@@ -129,7 +131,7 @@ function ClickBtn(num){
 						//前回アップロード時間
 						sessionStorage.setItem('updateTime', json.employeePojo.updateTime);
 						SalaryOut();
-    					bank();
+						bank(false);
 					}
 				}
 			});
@@ -146,10 +148,10 @@ function ClickBtn(num){
 		$("#DependentsPerson option[value='-1']").remove();
 		if($("#empid1").val()=="" && $("#empname1").val()==""){
 			$("#empid1err").html(MSG005)
-			$("empid1").removeClass("setbluetext");
-			$("empid1").addClass("errtext");
-			$("empname1").removeClass("setbluetext");
-			$("empname1").addClass("errtext");
+			$("#empid1").removeClass("setbluetext");
+			$("#empid1").addClass("errtext");
+			$("#empname1").removeClass("setbluetext");
+			$("#empname1").addClass("errtext");
 		}
 		else{
 			$.ajax({
@@ -161,18 +163,18 @@ function ClickBtn(num){
 				success:function(json){
 					if (json.employeePojo.peopleNum<1){
 						$("#empid1err").html(MSG005)
-						$("empid1").removeClass("setbluetext");
-						$("empid1").addClass("errtext");
-						$("empname1").removeClass("setbluetext");
-						$("empname1").addClass("errtext");
+						$("#empid1").removeClass("setbluetext");
+						$("#empid1").addClass("errtext");
+						$("#empname1").removeClass("setbluetext");
+						$("#empname1").addClass("errtext");
 						return
 					}
 					else if(json.employeePojo.peopleNum>1){
 						$("#empid1err").html(MSG018)
-						$("empid1").removeClass("setbluetext");
-						$("empid1").addClass("errtext");
-						$("empname1").removeClass("setbluetext");
-						$("empname1").addClass("errtext");
+						$("#empid1").removeClass("setbluetext");
+						$("#empid1").addClass("errtext");
+						$("#empname1").removeClass("setbluetext");
+						$("#empname1").addClass("errtext");
 						return
 					}
 					else{
@@ -287,6 +289,7 @@ function ClickBtn(num){
 				}
 					$("#Enter").attr('disabled',false);
 					$("input:text").attr('disabled',false);
+					$("#Age").attr('disabled',true);
 					$("#BankBranchCode").attr('disabled',true);
 					$("#BankBranchName").attr('disabled',true);
 					$("#AccountNo").attr('disabled',true);
@@ -296,6 +299,7 @@ function ClickBtn(num){
 					$("#AuthorityNo").val(-1);
 					$("#genderNo").val(-1);
 					$("#DependentsPerson").val(-1);
+					PostalCodechange();
 			}
 		});
 		return;
@@ -326,13 +330,13 @@ function enter(){
 			Salary=Salary.substring(0,Salary.length-4)+""+Salary.substring(Salary.length-3);
 		}
 		if(isNaN(Salary)&&Salary!=""){
-			("#Salaryerr$").html=MSG015;
+			$("#Salaryerr").html(MSG015);
 			$("#Salary").removeClass("setbluetext");
 			$("#Salary").addClass("errtext");
 			stop=true;
 		}
 		else if(Salary.length<5&&Salary!=""){
-			("#Salaryerr$").html=MSG008;
+			$("#Salaryerr").html(MSG008);
 			$("#Salary").removeClass("setbluetext");
 			$("#Salary").addClass("errtext");
 			stop=true;
@@ -377,7 +381,7 @@ function enter(){
 	     }
 		if($("#PhoneNo1").val().length+$("#PhoneNo2").val().length+$("#PhoneNo3").val().length>0){
 			if($("#PhoneNo1").val().length+$("#PhoneNo2").val().length+$("#PhoneNo3").val().length<11){
-		    	$("#PhoneNoerr").html(MSG011);
+		    	$("#PhoneNoerr").html(MSG014);
 				$("#PhoneNo1").removeClass("setbluetext");
 				$("#PhoneNo1").addClass("errtext");
 				$("#PhoneNo2").removeClass("setbluetext");
@@ -477,13 +481,13 @@ function enter(){
 			Salary=Salary.substring(0,Salary.length-4)+""+Salary.substring(Salary.length-3);
 		}
 		if(isNaN(Salary)&&Salary!=""){
-			("#Salaryerr$").html=MSG015;
+			$("#Salaryerr").html(MSG015);
 			$("#Salary").removeClass("setbluetext");
 			$("#Salary").addClass("errtext");
 			stop=true;
 		}
 		else if(Salary.length<5&&Salary!=""){
-			("#Salaryerr$").html=MSG008;
+			$("#Salaryerr").html(MSG008);
 			$("#Salary").removeClass("setbluetext");
 			$("#Salary").addClass("errtext");
 			stop=true;
@@ -568,44 +572,6 @@ function enter(){
 			$("#AccountName").addClass("errtext");	
 			stop=true;
 	    }
-//	    else if($("#BankNo").val()=="0"){
-//	    	if($("#BankBranchCode").val()!=""||
-//			$("#BankBranchName").val()!=""||
-//			$("#AccountNo").val()!=""||
-//			$("#AccountName").val()!=""){
-//				$("#empid2err").html(MSG017);
-//				$("#BankNo").removeClass("setbluetext");
-//				$("#BankNo").addClass("errtext");
-//				$("#BankBranchCode").removeClass("setbluetext");
-//				$("#BankBranchCode").addClass("errtext");	 
-//				$("#BankBranchName").removeClass("setbluetext");
-//				$("#BankBranchName").addClass("errtext");
-//				$("#AccountNo").removeClass("setbluetext");
-//				$("#AccountNo").addClass("errtext");	 
-//				$("#AccountName").removeClass("setbluetext");
-//				$("#AccountName").addClass("errtext");	 
-//				stop=true;
-//	    	}
-//	    }
-//	    else if($("#BankNo").val()!="0"){
-//	    		if($("#BankBranchCode").val()==""||
-//				$("#BankBranchName").val()==""||
-//				$("#AccountNo").val()==""||
-//				$("#AccountName").val()==""){
-//					$("#empid2err").html(MSG017);
-//					$("#BankNo").removeClass("setbluetext");
-//					$("#BankNo").addClass("errtext");
-//					$("#BankBranchCode").removeClass("setbluetext");
-//					$("#BankBranchCode").addClass("errtext");	 
-//					$("#BankBranchName").removeClass("setbluetext");
-//					$("#BankBranchName").addClass("errtext");
-//					$("#AccountNo").removeClass("setbluetext");
-//					$("#AccountNo").addClass("errtext");	 
-//					$("#AccountName").removeClass("setbluetext");
-//					$("#AccountName").addClass("errtext");	 
-//					stop=true;
-//		    	}
-//		}
 	    if (stop){
 	    	return;
 	    }
@@ -661,7 +627,7 @@ function enter(){
 		break;
 	case "2":
 		//修正
-    	if(confirm("修正してもよろしいでしょうか？？")){
+    	if(confirm("修正してもよろしいでしょうか？")){
     		$.ajax({
     			type:"post",
     			url:"empDataSeting.action",
@@ -701,6 +667,7 @@ function enter(){
     	    			alert("処理が成功しました");
     	    		}
     	    		else{
+    	    			$("#empid1err").html(MSG016);	 
     	    			alert("処理が失敗しました");
     	    		}
     			}
@@ -899,16 +866,18 @@ function load() {
 		var Year = Now.getFullYear();
 		var Month = Now.getMonth()+1;
 		Month=(Array(2).join(0) + Month).slice(-2);
-		var Day = Now.getDay();
+		var Day = Now.getDate();
 		Day=(Array(2).join(0) + Day).slice(-2);
 		$('#Calendar').attr('max',Year-20+'-'+Month+'-'+Day);
 		$('#Calendar').attr('min',Year-50+'-'+Month+'-'+Day);
 }
-function bank(){
+function bank(ischange){
+	if (ischange){
 	$("#BankBranchCode").val("");
 	$("#BankBranchName").val("");
 	$("#AccountNo").val("");
 	$("#AccountName").val("");
+	}
 	if ($("#BankNo").val()==0){
 		$("#BankBranchCode").attr('disabled',true);
 		$("#BankBranchName").attr('disabled',true);
@@ -984,14 +953,14 @@ function setage(){
 	var Age = Now.getFullYear()- Calendar[0];
     if(Age>0){
         if( Now.getMonth()+1 ==  Calendar[1]) {
-            if(Now.getDay()<Calendar[2])
+            if(Now.getDate()<Calendar[2])
             {
             	Age = Age - 1;
             }
         }
         else
         {
-            if(Now.getMonth()+1<Calendar[1])
+            if(Now.getMonth()+1<=Calendar[1])
             {
                 Age = Age - 1;
             }
