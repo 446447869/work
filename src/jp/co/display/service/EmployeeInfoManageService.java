@@ -35,12 +35,6 @@ public class EmployeeInfoManageService {
 		employeePojo.setMinemployeeNo(String.format("%03d", Integer.parseInt(employeePojo.getMinemployeeNo().substring(3))));
 		return employeePojo;
 	}
-	public EmployeePojo correct(EmployeeBean employeeBean) throws SQLException {
-		//修正検索処理
-		EmployeeInfoManageSql employeeInfoManageSql=new EmployeeInfoManageSql();
-		employeePojo=employeeInfoManageSql.selectEmployeeofDB(employeeBean);
-		return employeePojo;
-	}
 	public EmployeePojo bankcheck(EmployeeBean employeeBean) throws SQLException {
 		EmployeeInfoManageSql employeeInfoManageSql=new EmployeeInfoManageSql();
 		employeePojo=employeeInfoManageSql.bankcheck(employeeBean);

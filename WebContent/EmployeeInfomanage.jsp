@@ -32,7 +32,7 @@
 				<td><input name="btn2" id="btn2" type="button" onclick="ClickBtn(2)" value="修正" class="setbluebtn"></td>
 				<td><input name="btn3" id="btn3" type="button" onclick="ClickBtn(3)" value="削除" class="setbluebtn"></td>
 				<td><input name="btn4" id="btn4" type="button" onclick="ClickBtn(4)" value="一括修正" class="setbluebtn"></td>
-				<td><input name="btn5" id="btn5" type="button" onclick="ClickBtn(5)" value="詳細検索画面へ" class="setbluebtn"></td>
+				<td><input name="btn5" id="btn5" type="button" onclick="location.href='EmployeeSearch.jsp'" value="詳細検索画面へ" class="setbluebtn"></td>
 			</tr>
 		</table>
 	</div>
@@ -56,8 +56,10 @@
 			<tr>
 				<td>社員番号:</td><td><input type="text" name="empid2" id="empid2" class="setbluetext" size="10" maxlength=6></td>
 			<tr>
-				<td>社員名:</td><td><input type="text" name="empname2" id="empname2" class="setbluetext" size="10" maxlength=10></td>
+				<td>社員名:</td><td><input type="text" name="empname2" id="empname2" class="setbluetext" size="10" maxlength=10><font class="mark" color="red">★</font><span id="empname2err" class="err"></span></td>
 			</tr>
+		</table>
+		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:10px;">
 			<tr>
 				<td>性別:</td>
 				<td>
@@ -167,7 +169,7 @@
 		</table>
 		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:10px;">
 			<tr>
-				<td><font size=4><b>口座情報</b></font><span id="empid2err" class="err"></span></td>
+				<td><font size=4><b>口座情報</b></font><span id="bankerr" class="err"></span></td>
 			</tr>
 		</table>
 		<table style="position: relative;white-space: nowrap;border-collapse:separate; border-spacing:10px;">

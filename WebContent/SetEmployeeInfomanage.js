@@ -227,6 +227,10 @@ function ClickBtn(num){
 		$("#DependentsPerson").append("<option value='-1'></option>");
 		var minNo=$("#empid1_1").val();
 		var maxNo=$("#empid1_2").val();
+		if(minNo==""&&maxNo==""){
+			$("#empidhanierr").html(MSG022);
+			return;
+		}
 		if(minNo==""){
 			minNo="000";
 		}
@@ -324,8 +328,14 @@ function enter(){
 	var numandalphabet=/^[0-9a-zA-Z]*$/g;
 	var katakana=/^[ァ-ヶー　]*$/;
 	var stop=false;
-	var Salary=$("#Salary").val()
+	var Salary=$("#Salary").val();
 	if (sessionStorage.getItem('button')!="4"){
+		if($("#empname2").val()==""){
+			$("#empname2err").html(MSG006);
+			$("#empname2").removeClass("setbluetext");
+			$("#empname2").addClass("errtext");
+			stop=true;
+		}
 		if(Salary.length>3){
 			Salary=Salary.substring(0,Salary.length-4)+""+Salary.substring(Salary.length-3);
 		}
@@ -420,7 +430,7 @@ function enter(){
 				}
 		    }
 		    if((isNaN($("#AccountNo").val())&&$("#AccountNo").val()!="")||(isNaN($("#BankBranchCode").val())&&$("#BankBranchCode").val()!="")){
-			 	$("#empid2err").html(MSG015);
+			 	$("#bankerr").html(MSG015);
 				$("#AccountNo").removeClass("setbluetext");
 				$("#AccountNo").addClass("errtext");
 				$("#BankBranchCode").removeClass("setbluetext");
@@ -428,7 +438,7 @@ function enter(){
 				stop=true;
 			}
 		    else if(!katakana.test($("#AccountName").val())&&$("#AccountName").val()!=""){
-		    	$("#empid2err").html(MSG012);
+		    	$("#bankerr").html(MSG012);
 				$("#AccountName").removeClass("setbluetext");
 				$("#AccountName").addClass("errtext");	
 				stop=true;
@@ -438,7 +448,7 @@ function enter(){
 				$("#BankBranchName").val()!=""||
 				$("#AccountNo").val()!=""||
 				$("#AccountName").val()!=""){
-					$("#empid2err").html(MSG017);
+					$("#bankerr").html(MSG017);
 					$("#BankNo").removeClass("setbluetext");
 					$("#BankNo").addClass("errtext");
 					$("#BankBranchCode").removeClass("setbluetext");
@@ -457,7 +467,7 @@ function enter(){
 				$("#BankBranchName").val()==""||
 				$("#AccountNo").val()==""||
 				$("#AccountName").val()==""){
-					$("#empid2err").html(MSG017);
+					$("#bankerr").html(MSG017);
 					$("#BankNo").removeClass("setbluetext");
 					$("#BankNo").addClass("errtext");
 					$("#BankBranchCode").removeClass("setbluetext");
@@ -559,7 +569,7 @@ function enter(){
 			}
 	    }
 	    if((isNaN($("#AccountNo").val())&&$("#AccountNo").val()!="")||(isNaN($("#BankBranchCode").val())&&$("#BankBranchCode").val()!="")){
-		 	$("#empid2err").html(MSG015);
+		 	$("#bankerr").html(MSG015);
 			$("#AccountNo").removeClass("setbluetext");
 			$("#AccountNo").addClass("errtext");
 			$("#BankBranchCode").removeClass("setbluetext");
@@ -567,7 +577,7 @@ function enter(){
 			stop=true;
 		}
 	    else if(!katakana.test($("#AccountName").val())&&$("#AccountName").val()!=""){
-	    	$("#empid2err").html(MSG017);
+	    	$("#bankerr").html(MSG017);
 			$("#AccountName").removeClass("setbluetext");
 			$("#AccountName").addClass("errtext");	
 			stop=true;
@@ -677,7 +687,7 @@ function enter(){
 		break;
 	case "3":
 		//削除
-    	if(confirm("削除してもよろしいでしょうか？？")){
+    	if(confirm("削除してもよろしいでしょうか？")){
     		$.ajax({
     			type:"post",
     			url:"empDataSeting.action",
@@ -892,7 +902,7 @@ function bank(ischange){
 	}
 }
 function BankBranch(num){
-	$("#empid2err").html("");
+	$("#bankerr").html("");
 	$("BankBranchCode").removeClass("errtext");
 	$("BankBranchCode").addClass("setbluetext");
 	$("BankBranchName").removeClass("errtext");
@@ -913,7 +923,7 @@ function BankBranch(num){
 					$("BankBranchCode").addClass("errtext");
 					$("BankBranchName").removeClass("setbluetext");
 					$("BankBranchName").addClass("errtext");
-					$("#empid2err").html(MSG019);
+					$("#bankerr").html(MSG019);
 				}
 				else{
 					$("#BankBranchCode").val(json.employeePojo.bankBranchCode);
@@ -937,7 +947,7 @@ function BankBranch(num){
 					$("BankBranchCode").addClass("errtext");
 					$("BankBranchName").removeClass("setbluetext");
 					$("BankBranchName").addClass("errtext");
-					$("#empid2err").html(MSG019);
+					$("#bankerr").html(MSG019);
 				}
 				else{
 					$("#BankBranchName").val(json.employeePojo.bankBranchName);

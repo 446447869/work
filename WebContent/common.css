@@ -62,5 +62,14 @@ input:focus::-webkit-input-placeholder{
 	font-size:small;
 	border-collapse: collapse;
 	border-color:black;
-	background-color:#3498DB;
+	overflow:auto;
+    display: block;
+    table-layout: fixed;
+    text-align:center;
 	}
+*.pagehide{
+	visibility: hidden;
+}
+*.pageshow{
+	visibility: show;
+}
