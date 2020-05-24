@@ -586,6 +586,9 @@ function enter(){
 	    	return;
 	    }
 	}
+	 setTimeout("sw()", 10);
+}
+function sw(){
 	switch (sessionStorage.getItem('button')){
 	case "1":
 		//追加
